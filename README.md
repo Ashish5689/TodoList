@@ -1,5 +1,4 @@
 # 🚀 AI-Powered Todo List
-<<<<<<< HEAD
 
 Welcome to our cutting-edge, AI-powered Todo List application! Built with React and Next.js, this app combines traditional task management with AI-driven insights to supercharge your productivity.
 
@@ -51,9 +50,7 @@ Welcome to our cutting-edge, AI-powered Todo List application! Built with React 
 ### 4. Bulk Actions
 - 💥 Delete all tasks: Click "Delete All" (use with caution!)
 
+==============================================================
 ## 🏁 Getting Started
 - Link: https://ashishtodo--newtodoailist.netlify.app/
-=======
-Link : https://ashishtodo--newtodoailist.netlify.app/
-Welcome to our cutting-edge, AI-powered Todo List application! Built with
->>>>>>> 9d674ad1b58f5e232c5d560c9f4085eff043eada
+==============================================================
