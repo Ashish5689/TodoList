@@ -339,6 +339,11 @@ export function TodoListComponent() {
     setTasks(items);
   }
 
+  const deleteAllTasks = () => {
+    setTasks([]);
+    localStorage.removeItem('tasks');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-200 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
@@ -358,6 +363,10 @@ export function TodoListComponent() {
             <Button onClick={addTask} className="bg-white text-purple-500 hover:bg-purple-100">
               <PlusIcon className="h-5 w-5 mr-2" />
               Add
+            </Button>
+            <Button onClick={deleteAllTasks} className="bg-red-500 text-white hover:bg-red-600">
+              <Trash2Icon className="h-5 w-5 mr-2" />
+              Delete All
             </Button>
           </div>
           {error && (
