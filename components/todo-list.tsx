@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { PlusIcon, Trash2Icon, PencilIcon, SaveIcon, ChevronDownIcon, ChevronUpIcon, GripVerticalIcon, AlertCircleIcon } from "lucide-react"
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import { Input } from "@/components/ui/input"
@@ -130,7 +130,6 @@ export function TodoListComponent() {
   const [isListExpanded, setIsListExpanded] = useState(true)
   const [isAIProcessing, setIsAIProcessing] = useState(false)
   const [streamedTasks, setStreamedTasks] = useState<string>("")
-  const streamRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null)
   const [generatedTasks, setGeneratedTasks] = useState<string[]>([])
 
   // Set isClient to true when component mounts
