@@ -232,6 +232,7 @@ export function TodoListComponent() {
 
       const reader = response.body?.getReader()
       const decoder = new TextDecoder()
+      let fullStreamedTasks = ""
 
       while (true) {
         const { done, value } = await reader!.read()
@@ -254,10 +255,11 @@ export function TodoListComponent() {
           .map(line => line.choices[0].delta.content)
           .join('')
 
+        fullStreamedTasks += parsedLines
         setStreamedTasks(prev => prev + parsedLines)
       }
 
-      const newTasks = streamedTasks.split('\n').filter(task => task.trim() !== '')
+      const newTasks = fullStreamedTasks.split('\n').filter(task => task.trim() !== '')
       setGeneratedTasks(newTasks)
       setAiInput("")
     } catch (error) {
