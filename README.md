@@ -93,6 +93,27 @@ If you find this project useful, consider giving it a ⭐ on [GitHub](https://gi
 
 For any inquiries or suggestions, feel free to contact us at [your-email@example.com](mailto:Ashisheduims@gmail.com).
 
+## Environment Setup
+
+This project uses environment variables for sensitive data. To set up:
+
+1. Copy `.env.example` to `.env.local`:
+```bash
+cp .env.example .env.local
+```
+
+2. Update `.env.local` with your actual API keys:
+```env
+GEMINI_API_KEY=your_actual_key_here
+```
+
+3. For production deployment:
+- Netlify: Add environment variables in Site settings > Build & deploy > Environment
+- Vercel: Add environment variables in Project settings > Environment Variables
+- GitHub Pages: Use GitHub Secrets and Actions to inject environment variables
+
+⚠️ IMPORTANT: Never commit your actual API keys to the repository!
+
 ---
 
 Feel free to explore and make your productivity journey smarter with our AI-powered Todo List app!
