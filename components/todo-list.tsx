@@ -214,61 +214,43 @@ export function TodoListComponent() {
     setStreamedTasks("")
 
     try {
-      const response = await fetch('/api/breakdown-task', {
+      console.log('Sending request to AI breakdown endpoint...');
+      const response = await fetch('/api/ai-breakdown', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ activity: aiInput }),
-      })
+        body: JSON.stringify({ 
+          task: aiInput 
+        }),
+      });
 
-      console.log('API response status:', response.status);
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API error:', errorText);
-        throw new Error(`API request failed: ${errorText}`);
+        const errorData = await response.json();
+        console.error('API error:', errorData);
+        throw new Error(errorData.message || 'Failed to break down task');
       }
 
-      const reader = response.body?.getReader()
-      const decoder = new TextDecoder()
-      let fullStreamedTasks = ""
-
-      while (true) {
-        const { done, value } = await reader!.read()
-        if (done) {
-          break
-        }
-        const chunk = decoder.decode(value)
-        const lines = chunk.split('\n')
-        const parsedLines = lines
-          .map(line => line.replace(/^data: /, '').trim())
-          .filter(line => line !== '' && line !== '[DONE]')
-          .map(line => {
-            try {
-              return JSON.parse(line)
-            } catch (e) {
-              return null
-            }
-          })
-          .filter(line => line)
-          .map(line => line.choices[0].delta.content)
-          .join('')
-
-        fullStreamedTasks += parsedLines
-        setStreamedTasks(prev => prev + parsedLines)
+      const data = await response.json();
+      console.log('API Response data:', data);
+      
+      if (!data.subtasks || data.subtasks.length === 0) {
+        throw new Error('No tasks generated');
       }
 
-      const newTasks = fullStreamedTasks.split('\n').filter(task => task.trim() !== '')
-      setGeneratedTasks(newTasks)
-      setAiInput("")
-    } catch (error) {
-      console.error("Error breaking down activity:", error)
-      setError("An error occurred while breaking down the activity. Please try again.")
+      setGeneratedTasks(data.subtasks);
+      setStreamedTasks(data.subtasks.map((task: string, index: number) => `${index + 1}. ${task}`).join('\n'));
+      setAiInput("");
+    } catch (error: any) {
+      console.error("Error breaking down activity:", error);
+      setError(typeof error === 'string' ? error : error.message || "An error occurred while breaking down the activity. Please try again.");
     } finally {
-      setIsAIProcessing(false)
+      setIsAIProcessing(false);
     }
-  }
+  };
 
   const addGeneratedTasksToTodoList = () => {
     const newTasks = generatedTasks.map(task => ({
