@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error('GEMINI_API_KEY is not defined in environment variables');
+// Check for API key at startup
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+if (!GEMINI_API_KEY) {
+  throw new Error(
+    'GEMINI_API_KEY is not defined. Please add it to your environment variables. ' +
+    'See README.md for setup instructions.'
+  );
 }
 
 // Using the direct API endpoint for gemini-1.5-flash
@@ -11,6 +16,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Verify API key is available at runtime
+  if (!GEMINI_API_KEY) {
+    console.error('API key not found in environment');
+    return res.status(500).json({ 
+      message: 'Server configuration error - API key not available',
+      error: 'MISSING_API_KEY'
+    });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -22,7 +36,7 @@ export default async function handler(
       return res.status(400).json({ message: 'Task is required' });
     }
 
-    const response = await fetch(`${GEMINI_API_ENDPOINT}?key=${process.env.GEMINI_API_KEY}`, {
+    const response = await fetch(`${GEMINI_API_ENDPOINT}?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
